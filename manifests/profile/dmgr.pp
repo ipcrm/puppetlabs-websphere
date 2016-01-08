@@ -18,6 +18,7 @@ define websphere::profile::dmgr (
   $collect_jvm_logs        = true,
   $wsadmin_user            = undef,
   $wsadmin_pass            = undef,
+  $default_soap_port       = '8879',
 ) {
 
   validate_absolute_path($instance_base)
@@ -74,13 +75,11 @@ define websphere::profile::dmgr (
   $_cell      = downcase($cell)
   $_profile   = downcase($profile_name)
   $_node      = downcase($node_name)
-  $soap_port  = getvar("websphere_${_profile}_${_cell}_${_node}_soap")
+  $soap_port  = pick(getvar("websphere_${_profile}_${_cell}_${_node}_soap"), $default_soap_port)
 
-  if $soap_port {
-    @@file { "/etc/dmgr_${_dmgr_host}_${_cell}":
-      ensure  => 'file',
-      content => template("${module_name}/dmgr_federation.yaml.erb"),
-    }
+  @@file { "/etc/dmgr_${_dmgr_host}_${_cell}":
+    ensure  => 'file',
+    content => template("${module_name}/dmgr_federation.yaml.erb"),
   }
 
   validate_bool($manage_sdk)

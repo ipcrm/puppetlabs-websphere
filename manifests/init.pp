@@ -1,4 +1,3 @@
-#
 class websphere (
   $base_dir     = '/opt/IBM',
   $user         = 'websphere',
@@ -57,11 +56,23 @@ class websphere (
   }
 
   ## concat is used to populate a file for facter
-  concat { "${settings::vardir}/facts.d/websphere.yaml":
+  # Make sure directories exist
+  $factdirs = [
+    '/etc/puppetlabs/facter',
+    '/etc/puppetlabs/facter/facts.d'
+  ]
+  file{$factdirs:
+    ensure => directory,
+    owner  => root,
+    group  => root,
+    mode   => '0755',
+  }
+
+  concat { '/etc/puppetlabs/facter/facts.d/websphere.yaml':
     ensure => 'present',
   }
   concat::fragment { 'websphere_facts_header':
-    target  => "${settings::vardir}/facts.d/websphere.yaml",
+    target  => '/etc/puppetlabs/facter/facts.d/websphere.yaml',
     order   => '01',
     content => "---\nwebsphere_base_dir: ${base_dir}\n",
   }

@@ -24,7 +24,7 @@ define websphere::cluster (
   if $collect_members {
 
     ## Collect any or our exported defined types
-    Websphere::Cluster::Member <<| cell == $cell and dmgr_host == $dmgr_host |>> {
+    Websphere::Cluster::Member <<| cell == $cell |>> {
       profile_base => $profile_base,
       dmgr_profile => $dmgr_profile,
       user         => $user,
