@@ -190,6 +190,7 @@ EOT
   ## We want to make sure we sync the app node with the dmgr when things
   ## change.  This happens automatically anyway, but with a delay.
   def flush
-    sync_node
+      sync_node
   end
+
 end
