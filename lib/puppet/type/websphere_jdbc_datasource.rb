@@ -114,8 +114,8 @@ Puppet::Type.newtype(:websphere_jdbc_datasource) do
 
     Boolean: true or false
     EOT
-    newvalue :true
-    newvalue :false
+    #newvalue(:true)
+    #newvalue(:false)
     defaultto true
   end
 
