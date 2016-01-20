@@ -61,20 +61,25 @@ class websphere (
     '/etc/puppetlabs/facter',
     '/etc/puppetlabs/facter/facts.d'
   ]
-  file{$factdirs:
-    ensure => directory,
-    owner  => root,
-    group  => root,
-    mode   => '0755',
-  }
+
+  ensure_resource('file',$factdirs,{
+    'ensure' => 'present',
+    'owner'  => 'root',
+    'group'  => 'root',
+    'mode'   => '0755',
+    }
+  )
 
   concat { '/etc/puppetlabs/facter/facts.d/websphere.yaml':
-    ensure => 'present',
+    ensure  => 'present',
+    require => File[$factdirs]
   }
+
   concat::fragment { 'websphere_facts_header':
     target  => '/etc/puppetlabs/facter/facts.d/websphere.yaml',
     order   => '01',
     content => "---\nwebsphere_base_dir: ${base_dir}\n",
+    require => File[$factdirs]
   }
 
 }
