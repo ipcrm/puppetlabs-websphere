@@ -26,6 +26,7 @@ __Puppet Forge:__ [https://forge.puppetlabs.com/joshbeard/websphere](https://for
         * [8. JVM Logs](#8-jvm-logs)
         * [9. JDBC Providers and Datasources](#9-jdbc-providers-and-datasources)
         * [10. IHS](#10-ihs)
+        * [11. Application Deployment](#11-app)
 5. [Limitations](#limitations)
 6. [Dependencies](#dependencies)
 7. [Authors](#authors)
@@ -182,6 +183,7 @@ directory.
 | [websphere_sdk](docs/types/websphere_sdk.md) | Manages the SDK version for a WebSphere profile or server.
 | [websphere_variable](docs/types/websphere_variable.md) | Manages WebSphere environment variables.
 | [websphere_web_server](docs/types/websphere_web_server.md) | Manages the creation and configuration of WebSphere web servers.
+| [websphere_app](docs/types/websphere_app.md) | Manages the deployment of an application to the cluster
 
 ## Usage
 
@@ -747,6 +749,27 @@ websphere::ihs::server { 'test':
   require     => Websphere::Package['Plugins'],
 }
 ```
+
+#### 11. Application Deployment
+
+The websphere_app type is capable of deploying a war or ear file to the cluster.  This
+code would be classified onto the DMGR host.
+
+```puppet
+websphere_app{'HelloWorld':
+  ensure          => present,
+  appsource       => '/vagrant/ibm/apps/helloworld.ear',
+  cell            => 'CELL_01',
+  cluster         => 'MyCluster01',
+  user            => 'websphere',
+  profile_base    => '/opt/IBM/WebSphere/AppServer/profiles',
+  dmgr_profile    => 'PROFILE_DMGR_01',
+  webmodule       => "Hello, World Application",
+  webmodule_uri   => "helloworld.war,WEB-INF/web.xml",
+  webmodule_vhost => "default_host"
+}
+```
+
 
 __References:__
 
