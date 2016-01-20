@@ -1,7 +1,9 @@
 require 'pathname'
 
 Puppet::Type.newtype(:websphere_app) do
-  @doc = "This manages WebSphere Application Deployment"
+  @doc = <<-EOT 
+    This type allows you to deploy an application via Puppet to Websphere
+  EOT
 
   ensurable
 
